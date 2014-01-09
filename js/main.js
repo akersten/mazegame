@@ -20,7 +20,7 @@ function init() {
 
   scene = new THREE.Scene();
 
-  loaderEnc.geometry = new THREE.TextGeometry("graphics test GOTY Edition",
+  loaderEnc.geometry = new THREE.TextGeometry("Maze Game",
                                               {
                                                 size: 40,
                                                 height: 10,
@@ -70,12 +70,6 @@ function animate() {
 
     var tmpV3;
 
-    //Spin around the text
-    loaderEnc.theta += loaderEnc.spinVelocity / 1.5;
-    tmpV3 = new THREE.Vector3();
-    tmpV3.set(500 * Math.cos(loaderEnc.theta), 500 * Math.sin(loaderEnc.theta), 750);
-    camera.position = tmpV3;
-
     //Get the centered position vector of the text and look at it as we fly around.
     tmpV3 = new THREE.Vector3();
     tmpV3.copy(loaderEnc.mesh.geometry.boundingBox.max);
@@ -83,7 +77,14 @@ function animate() {
     tmpV3.multiplyScalar(0.5);
     tmpV3.add(loaderEnc.mesh.position);
 
+
+    //Wobble
+    loaderEnc.theta += loaderEnc.spinVelocity / 4.5;
+    camera.position.set(tmpV3.x, 25 * Math.sin(loaderEnc.theta), 150);
+
     camera.lookAt(tmpV3);
+
+
 
   }
 
