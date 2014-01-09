@@ -303,3 +303,81 @@ function generate_DFS(width, height) {
 
   return mazeData;
 }
+
+
+/**
+ * Generates THREE.js geometry for maze data as specified above.
+ * Uses built-in merge functionality to make it all one mesh instead of a bunch
+ * of individual cubes. Hopefully THREE.js is smart enough to do internal face
+ * culling and optimization.
+ *
+ * @return A geometry representing the maze.
+ */
+function generateMazeGeometry(mazeObj) {
+  /**
+   * Translate all points in a geometry `n` units in the x direction.
+   */
+  function transx(geo, n) {
+    for (var i = 0; i < geo.vertices.length; i++) {
+      geo.vertices[i].x += n;
+    }
+  }
+
+  /**
+   * Translate all points in a geometry `n` units in the z direction.
+   */
+  function transz(geo, n) {
+    for (var i = 0; i < geo.vertices.length; i++) {
+      geo.vertices[i].z += n;
+    }
+  }
+
+  var blockSize = 30;
+
+  //We'll have the upper-left cornerstone be our anchor. Generate it first and
+  //attach anything else to it.
+  var geo = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+
+  //For each row, look north and east and add a block if there's a wall there.
+  //We'll manually add the south-border and west-border (if walls exist).
+  //This process is to avoid overlap by placing cubes twice for the same wall,
+  //since there's redundant information in the data structure.
+  for (var i = 0; i < mazeObj.height; i++) {
+    for (var j = 0; j < mazeObj.width; j++) {
+      if (j == 0) {
+        //Touches west border, manual corner case
+        if (mazeObj.hasWall(j, i, 2)) {
+          var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+          transz(tmp, (2 * i + 1) * blockSize);
+          THREE.GeometryUtils.merge(geo,tmp);
+        }
+      }
+
+      if (mazeObj.hasWall(j, i, 0)) {
+          var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+          transz(tmp, 2 * i * blockSize);
+          transx(tmp, 2 * j * blockSize);
+          THREE.GeometryUtils.merge(geo,tmp);
+      }
+
+      if (mazeObj.hasWall(j, i, 1)) {
+          var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+          transz(tmp, (2 * i + 1) * blockSize);
+          transx(tmp, (2 * j + 1) * blockSize);
+          THREE.GeometryUtils.merge(geo,tmp);
+      }
+
+      if (i == mazeObj.height - 1) {
+        //Touches south border, manual corner case
+        if (mazeObj.hasWall(j, i, 3)) {
+          var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+          transz(tmp, 2 * (i + 1) * blockSize);
+          transx(tmp, 2 * j * blockSize);
+          THREE.GeometryUtils.merge(geo,tmp);
+        }
+      }
+    }
+  }
+
+  return geo;
+}

@@ -16,11 +16,12 @@ var loaderEnc = {
 function init() {
   camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1,10000);
   camera.position.z = 250;
+  camera.position.y = 100;
   camera.position.x = 100;
 
   scene = new THREE.Scene();
 
-  loaderEnc.geometry = new THREE.TextGeometry("Maze Game",
+  loaderEnc.geometry = new THREE.TextGeometry("Loading...",
                                               {
                                                 size: 40,
                                                 height: 10,
@@ -39,6 +40,7 @@ function init() {
   );
 
   loaderEnc.mesh = new THREE.Mesh(loaderEnc.geometry, loaderEnc.material);
+  loaderEnc.mesh.position.z -= 15;
   scene.add(loaderEnc.mesh);
 
   renderer = new THREE.WebGLRenderer({canvas: document.getElementById('renderCanvas')});
@@ -47,12 +49,31 @@ function init() {
   gameTimer.start();
 }
 
+var ranOnce = false;
+var ii = 0;
+
+var g = new game();
+
+ function runOnce() {
+      if (ranOnce) {
+        return;
+      }
+   ranOnce = true;
+   ii++;
+      alert("k " + ii);
+
+   var p = g.currentMazeMesh.position;
+      alert("going to look at " + p.x + " " + p.y + " " + p.z);
+      scene.add(g.currentMazeMesh);
+    }
+
+
 function animate() {
   requestAnimationFrame(animate);
   var delta = gameTimer.getDelta();
 
   //If the game's not loaded, spin the loader.
-  if (!game.loaded) {
+  if (!g.loaded) {
     loaderEnc.ticks++;
     if (loaderEnc.ticks >= 90) {
       loaderEnc.ticks = 0;
@@ -86,7 +107,14 @@ function animate() {
 
 
 
+  } else {
+
+
+    runOnce();
+
+    camera.lookAt(g.currentMazeMesh.position);
   }
+
 
   renderer.render(scene, camera);
 }
