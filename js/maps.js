@@ -57,7 +57,21 @@ function maze(width, height) {
               if (this.mazeData[i * width + k] & 0x01) {
                 line += "H";
               }else {
-              line += " "
+                switch((this.mazeData[i * width + k] & 0x0C) >> 2) {
+                  case 0:
+                    line += "^";
+                    break;
+                  case 1:
+                    line += ">";
+                    break;
+                  case 2:
+                    line += "<";
+                    break;
+                  case 3:
+                    line += "v";
+                    break;
+                }
+
               }
               if (this.hasWall(k, i, 1)) {
                 line += "|";
@@ -223,10 +237,9 @@ function generate_DFS(width, height) {
 
   //Pick a random cell to start from.
   var curCell = ~~(Math.random() * msize);
-  mazeData[curCell] |= 0x01;
+  mazeData[curCell] |= 0x03; //Home is both visited and the home cell.
 
-  var dbg = 0;
-  while (dbg < 15) {
+  while (true) {
     //Pick an unvisited neighbor at random.
     var canCell = getRandomUnvisitedNeighbor(curCell);
 
@@ -237,8 +250,8 @@ function generate_DFS(width, height) {
         break;
       }
 
-      dbg++;
-      curCell = getNeighbor(curCell, (curCell & 0x0C) >> 2);
+      var tmpCpy = curCell;
+      curCell = getNeighbor(curCell, (mazeData[curCell] & 0x0C) >> 2);
       continue;
     }
 
