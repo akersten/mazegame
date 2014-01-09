@@ -50,22 +50,17 @@ function init() {
 }
 
 var ranOnce = false;
-var ii = 0;
-
 var g = new game();
 
- function runOnce() {
-      if (ranOnce) {
-        return;
-      }
-   ranOnce = true;
-   ii++;
-      alert("k " + ii);
+function runOnce() {
+  if (ranOnce) {
+    return;
+  }
+  ranOnce = true;
 
-   var p = g.currentMazeMesh.position;
-      alert("going to look at " + p.x + " " + p.y + " " + p.z);
-      scene.add(g.currentMazeMesh);
-    }
+  scene.add(g.currentMazeMesh);
+  scene.add(g.playerMesh)
+}
 
 
 function animate() {
@@ -106,17 +101,36 @@ function animate() {
     camera.lookAt(tmpV3);
 
 
-
-  } else {
-
-
-    runOnce();
-
-    camera.lookAt(g.currentMazeMesh.position);
+    renderer.render(scene, camera);
+    return;
   }
 
 
+  runOnce();
+
+  camera.position.x = g.playerMesh.position.x;
+  camera.position.z = g.playerMesh.position.z;
+  camera.position.y = 200;
+  camera.lookAt(g.playerMesh.position);
+  camera.rotation.z = 0;
+
+  if (keymap.pressed['goUp']) {
+    g.playerMesh.position.z -= delta * 10;
+  }
+  if (keymap.pressed['goRight']) {
+     g.playerMesh.position.x += delta * 10;
+  }
+  if (keymap.pressed['goLeft']) {
+     g.playerMesh.position.x -= delta * 10;
+  }
+  if (keymap.pressed['goDown']) {
+     g.playerMesh.position.z += delta * 10;
+  }
+
   renderer.render(scene, camera);
+
+
+
 }
 
 

@@ -2,14 +2,30 @@
  * The maze object.
  */
 function maze(width, height) {
+  if (width < 2 || height < 2) {
+    alert("Invalid maze parameters!");
+  }
+
   this.width = width;
   this.height = height;
   this.mazeData = generate_DFS(width, height);
-
   this.size = width * height;
 
-  if (width < 2 || height < 2) {
-    alert("Invalid maze parameters!");
+  //Find out where the starting position in this labrynth will be.
+  this.findHomeCell = function() {
+    for (var i = 0; i < height; i++) {
+      for (var j = 0; j < width; j++) {
+        if (this.mazeData[i * width + j] & 0x01) {
+          console.log("Home cell found at " + j + "," + i);
+          return i * width + j;
+        }
+      }
+    }
+    return -1;
+  }
+  this.homecell = this.findHomeCell();
+  if (this.homecell == -1) {
+    alert("Couldn't determine home cell.");
   }
 
   /**
@@ -60,6 +76,8 @@ function maze(width, height) {
               }
               if (this.mazeData[i * width + k] & 0x01) {
                 line += "H";
+                //By the way, this is the home square...
+
               }else {
                 switch((this.mazeData[i * width + k] & 0x0C) >> 2) {
                   case 0:

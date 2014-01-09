@@ -9,13 +9,17 @@
  */
 keymap = new function() {
   this.pressed = {
-    'rotateLeft': false,
-    'roateRight': false
+    'goLeft': false,
+    'goRight': false,
+    'goDown': false,
+    'goUp': false,
   };
 
   this.map = {
-    65: 'rotateLeft',
-    66: 'rotateRight'
+    65: 'goLeft',
+    83: 'goDown',
+    68: 'goRight',
+    87: 'goUp',
   };
 };
 
