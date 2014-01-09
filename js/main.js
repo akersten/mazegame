@@ -1,4 +1,4 @@
-var camera, scene, renderer, gameTimer;
+
 
 /**
  * Garbage loader-specific logic, bleh
@@ -135,16 +135,24 @@ function animate() {
   camera.rotation.z = 0;
 
   if (keymap.pressed['goUp']) {
-    g.playerMesh.position.z -= delta * 40;
+    if (!wouldPlayerCollideWithMaze(new THREE.Vector3(0, 0, -1), delta * 40 + 1.5)) {
+      g.playerMesh.position.z -= delta * 40;
+    }
   }
   if (keymap.pressed['goRight']) {
-     g.playerMesh.position.x += delta * 40;
+    if (!wouldPlayerCollideWithMaze(new THREE.Vector3(1, 0, 0), delta * 40 + 1.5)) {
+      g.playerMesh.position.x += delta * 40;
+    }
   }
   if (keymap.pressed['goLeft']) {
-     g.playerMesh.position.x -= delta * 40;
+    if (!wouldPlayerCollideWithMaze(new THREE.Vector3(-1, 0, 0), delta * 40 + 1.5)) {
+      g.playerMesh.position.x -= delta * 40;
+    }
   }
   if (keymap.pressed['goDown']) {
-     g.playerMesh.position.z += delta * 40;
+    if (!wouldPlayerCollideWithMaze(new THREE.Vector3(0, 0, 1), delta * 40 + 1.5)) {
+      g.playerMesh.position.z += delta * 40;
+    }
   }
 
   renderer.render(scene, camera);

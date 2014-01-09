@@ -1,3 +1,4 @@
+var camera, scene, renderer, gameTimer;
 /**
  * The main game object.
  */
@@ -26,3 +27,9 @@ function game() {
 
 
 
+function wouldPlayerCollideWithMaze(direction, distance) {
+  var ray = new THREE.Raycaster(g.playerMesh.position, direction, 0, distance + 1);
+  var colliders = ray.intersectObject(g.currentMazeMesh, false);
+
+  return (colliders.length > 0 && colliders[0].distance < distance);
+}
