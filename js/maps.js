@@ -350,7 +350,7 @@ function generateMazeGeometry(mazeObj) {
     }
   }
 
-  var blockSize = 30;
+  var blockSize = 25;
 
   //We'll have the upper-left cornerstone be our anchor. Generate it first and
   //attach anything else to it.
@@ -362,27 +362,49 @@ function generateMazeGeometry(mazeObj) {
   //since there's redundant information in the data structure.
   for (var i = 0; i < mazeObj.height; i++) {
     for (var j = 0; j < mazeObj.width; j++) {
+      //XXX: There's a tiny bit of overlap in some of the generated meshes, once
+      //in a while they'll generate in the same spot. I don't think it really
+      //matters since the merge will optimize that out(?) but just something to
+      //know.
       if (j == 0) {
         //Touches west border, manual corner case
         if (mazeObj.hasWall(j, i, 2)) {
           var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
           transz(tmp, (2 * i + 1) * blockSize);
           THREE.GeometryUtils.merge(geo,tmp);
+
+          var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+          transz(tmp, (2 * i + 2) * blockSize);
+          THREE.GeometryUtils.merge(geo,tmp);
         }
       }
 
       if (mazeObj.hasWall(j, i, 0)) {
+        var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+        transz(tmp, 2 * i * blockSize);
+        transx(tmp, (2 * j + 1) * blockSize);
+        THREE.GeometryUtils.merge(geo,tmp);
+
+        //Randomly don't generate this, to give the maze some more variety.
+        if (!(i > 0 && i < mazeObj.height - 1 && j > 0 && j < mazeObj.width - 1 && Math.random() > 0.2)) {
           var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
           transz(tmp, 2 * i * blockSize);
-          transx(tmp, 2 * j * blockSize);
+          transx(tmp, (2 * j + 2) * blockSize);
           THREE.GeometryUtils.merge(geo,tmp);
+        }
       }
 
       if (mazeObj.hasWall(j, i, 1)) {
+        var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+        transz(tmp, (2 * i + 1) * blockSize);
+        transx(tmp, (2 * j + 2) * blockSize);
+        THREE.GeometryUtils.merge(geo,tmp);
+        if (!(i > 0 && i < mazeObj.height - 1 && j > 0 && j < mazeObj.width - 1 && Math.random() > 0.2)) {
           var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
-          transz(tmp, (2 * i + 1) * blockSize);
-          transx(tmp, (2 * j + 1) * blockSize);
+          transz(tmp, (2 * i) * blockSize);
+          transx(tmp, (2 * j + 2) * blockSize);
           THREE.GeometryUtils.merge(geo,tmp);
+        }
       }
 
       if (i == mazeObj.height - 1) {
@@ -390,7 +412,12 @@ function generateMazeGeometry(mazeObj) {
         if (mazeObj.hasWall(j, i, 3)) {
           var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
           transz(tmp, 2 * (i + 1) * blockSize);
-          transx(tmp, 2 * j * blockSize);
+          transx(tmp, (2 * j + 1) * blockSize);
+          THREE.GeometryUtils.merge(geo,tmp);
+
+          var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
+          transz(tmp, 2 * (i + 1) * blockSize);
+          transx(tmp, (2 * j + 2) * blockSize);
           THREE.GeometryUtils.merge(geo,tmp);
         }
       }

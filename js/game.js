@@ -5,7 +5,7 @@ function game() {
   this.loaded = false;
 
   //First we'll generate the actual maze data.
-  this.currentMaze = new maze(2,2);
+  this.currentMaze = new maze(10,10);
   this.currentMaze.debugPrint();
 
   //Then, generate the world geometry.

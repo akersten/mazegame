@@ -50,16 +50,37 @@ function init() {
 }
 
 var ranOnce = false;
-var g = new game();
-
 function runOnce() {
   if (ranOnce) {
     return;
   }
   ranOnce = true;
+  camera.position.y = 200;
+
+  scene.remove(loaderEnc.mesh);
 
   scene.add(g.currentMazeMesh);
-  scene.add(g.playerMesh)
+  scene.add(g.playerMesh);
+
+  //generate backing pane
+  var bgsx = g.currentMaze.width * 2 * 25 + 25;
+  var bgsz = g.currentMaze.height * 2 * 25 + 25;
+  var bg = new THREE.Mesh(new THREE.PlaneGeometry(bgsx, bgsz),
+
+                          new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: false}));
+  bg.rotation.x = Math.PI * 3 / 2;
+  bg.position.y = -12.5;
+  bg.position.x += bgsx / 2 - 12.5;
+  bg.position.z += bgsz / 2 - 12.5;
+  scene.add(bg);
+
+
+  //generate giant background plane
+  var bg2 = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000),
+                           new THREE.MeshBasicMaterial({color: 0x111111, wireframe: false}));
+  bg2.rotation.x = Math.PI * 3/2;
+  bg2.position.y = -25;
+  scene.add(bg2);
 }
 
 
@@ -110,21 +131,20 @@ function animate() {
 
   camera.position.x = g.playerMesh.position.x;
   camera.position.z = g.playerMesh.position.z;
-  camera.position.y = 200;
   camera.lookAt(g.playerMesh.position);
   camera.rotation.z = 0;
 
   if (keymap.pressed['goUp']) {
-    g.playerMesh.position.z -= delta * 10;
+    g.playerMesh.position.z -= delta * 40;
   }
   if (keymap.pressed['goRight']) {
-     g.playerMesh.position.x += delta * 10;
+     g.playerMesh.position.x += delta * 40;
   }
   if (keymap.pressed['goLeft']) {
-     g.playerMesh.position.x -= delta * 10;
+     g.playerMesh.position.x -= delta * 40;
   }
   if (keymap.pressed['goDown']) {
-     g.playerMesh.position.z += delta * 10;
+     g.playerMesh.position.z += delta * 40;
   }
 
   renderer.render(scene, camera);
@@ -133,6 +153,6 @@ function animate() {
 
 }
 
-
+var g = new game();
 init();
 animate();
