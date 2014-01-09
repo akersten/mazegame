@@ -4,9 +4,7 @@
 function maze(width, height) {
   this.width = width;
   this.height = height;
-  console.log("Generating maze...");
   this.mazeData = generate_DFS(width, height);
-  console.log("Maze generated!");
 
   this.size = width * height;
 
@@ -14,6 +12,12 @@ function maze(width, height) {
     alert("Invalid maze parameters!");
   }
 
+  /**
+   * Whether this maze has a wall in a certain direction of a particular cell.
+   *
+   * @return true if there is a wall in the `dir` direction from the cell at
+   *         `x`*`y`, false otherwise.
+   */
   this.hasWall = function(x, y, dir) {
     var bits = this.mazeData[y * this.width + x];
     switch (dir) {
@@ -112,6 +116,8 @@ function maze(width, height) {
  *         Visited bit is for the DFS to determine if any neighbors of the
  *         current cell need exploring. Home bit is to let us know whether the
  *         backtrack direction is valid (or if generation has come to an end).
+ *
+ * @return A typed array containing `width` * `height` entries of the above.
  */
 function generate_DFS(width, height) {
   var msize = width * height;
