@@ -65,9 +65,9 @@ function runOnce() {
   //generate backing pane
   var bgsx = g.currentMaze.width * 2 * 25 + 25;
   var bgsz = g.currentMaze.height * 2 * 25 + 25;
-  var bg = new THREE.Mesh(new THREE.PlaneGeometry(bgsx, bgsz),
+  var bg = new THREE.Mesh(new THREE.PlaneGeometry(bgsx, bgsz, 32, 32),
 
-                          new THREE.MeshBasicMaterial( { color: 0x333333, wireframe: false}));
+                          new THREE.MeshLambertMaterial( { color: 0x333333, wireframe: false}));
   bg.rotation.x = Math.PI * 3 / 2;
   bg.position.y = -12.5;
   bg.position.x += bgsx / 2 - 12.5;
@@ -76,11 +76,15 @@ function runOnce() {
 
 
   //generate giant background plane
-  var bg2 = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000),
-                           new THREE.MeshBasicMaterial({color: 0x111111, wireframe: false}));
+  var bg2 = new THREE.Mesh(new THREE.PlaneGeometry(bgsx * 2, bgsz * 2),
+                           new THREE.MeshLambertMaterial({color: 0x111111, wireframe: false}));
   bg2.rotation.x = Math.PI * 3/2;
   bg2.position.y = -25;
+  bg2.position.x += bgsx / 2;
+  bg2.position.z += bgsz / 2;
   scene.add(bg2);
+
+  scene.add(g.playerLight);
 }
 
 
@@ -130,7 +134,7 @@ function animate() {
   runOnce();
 
   camera.position.x = g.playerMesh.position.x;
-  camera.position.z = g.playerMesh.position.z;
+  camera.position.z = g.playerMesh.position.z + 10;
   camera.lookAt(g.playerMesh.position);
   camera.rotation.z = 0;
 
@@ -154,6 +158,10 @@ function animate() {
       g.playerMesh.position.z += delta * 40;
     }
   }
+
+  g.playerMesh.rotation.y += 0.01;
+  g.playerMesh.rotation.x += 0.02;
+  g.playerLight.position.set(g.playerMesh.position.x, 25, g.playerMesh.position.z);
 
   renderer.render(scene, camera);
 

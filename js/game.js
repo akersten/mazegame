@@ -11,17 +11,18 @@ function game() {
 
   //Then, generate the world geometry.
   var currentMazeGeometry = generateMazeGeometry(this.currentMaze);
-  this.currentMazeMesh = new THREE.Mesh(currentMazeGeometry,new THREE.MeshBasicMaterial(
-    { color: 0xBBFFCC, wireframe: true }));
+  this.currentMazeMesh = new THREE.Mesh(currentMazeGeometry,new THREE.MeshLambertMaterial(
+    { color: 0xBBFFCC, wireframe: false }));
 
   var playerGeometry = new THREE.SphereGeometry(10, 3, 2);
-  this.playerMesh = new THREE.Mesh(playerGeometry, new THREE.MeshBasicMaterial(
-    {color: 0xFFBBEE, wireframe: true }));
+  this.playerMesh = new THREE.Mesh(playerGeometry, new THREE.MeshLambertMaterial(
+    {color: 0xFFBBEE, wireframe: false }));
 
   //Move the player to where they should be...
   this.playerMesh.position.x = 2 * (this.currentMaze.homecell % this.currentMaze.width) * 25 + 25;
   this.playerMesh.position.z = 2 * ~~(this.currentMaze.homecell / this.currentMaze.width) * 25 + 25;
 
+  this.playerLight = new THREE.PointLight(0xffffff, 1, 100);
   this.loaded = true;
 }
 

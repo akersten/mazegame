@@ -386,7 +386,7 @@ function generateMazeGeometry(mazeObj) {
         THREE.GeometryUtils.merge(geo,tmp);
 
         //Randomly don't generate this, to give the maze some more variety.
-        if (!(i > 0 && i < mazeObj.height - 1 && j > 0 && j < mazeObj.width - 1 && Math.random() > 0.2)) {
+        if (!(i > 0 && i < mazeObj.height - 1 && j > 0 && j < mazeObj.width - 1 && Math.random() > 0.6)) {
           var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
           transz(tmp, 2 * i * blockSize);
           transx(tmp, (2 * j + 2) * blockSize);
@@ -399,7 +399,7 @@ function generateMazeGeometry(mazeObj) {
         transz(tmp, (2 * i + 1) * blockSize);
         transx(tmp, (2 * j + 2) * blockSize);
         THREE.GeometryUtils.merge(geo,tmp);
-        if (!(i > 0 && i < mazeObj.height - 1 && j > 0 && j < mazeObj.width - 1 && Math.random() > 0.2)) {
+        if (!(i > 0 && i < mazeObj.height - 1 && j > 0 && j < mazeObj.width - 1 && Math.random() > 0.6)) {
           var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
           transz(tmp, (2 * i) * blockSize);
           transx(tmp, (2 * j + 2) * blockSize);
