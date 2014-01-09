@@ -138,7 +138,7 @@ function generate_DFS(width, height) {
    */
   function getRandomUnvisitedNeighbor(where) {
     if (where < 0 || where >= msize) {
-      alert("Index out of bounds: " + where);
+      alert("Neighbor index out of bounds: " + where);
       return -1;
     }
 
@@ -173,8 +173,6 @@ function generate_DFS(width, height) {
         candidates.push(where + 1);
       }
     }
-
-    console.log("Candidates length was " + candidates.length);
 
     if (candidates.length == 0) {
       return -1;
@@ -250,7 +248,6 @@ function generate_DFS(width, height) {
         break;
       }
 
-      var tmpCpy = curCell;
       curCell = getNeighbor(curCell, (mazeData[curCell] & 0x0C) >> 2);
       continue;
     }
