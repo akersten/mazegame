@@ -320,7 +320,25 @@ function generate_DFS(width, height) {
   }
 
   //Pick a random edge cell from which to knock out the exit.
-
+  var rnd = ~~(Math.random() * 3);
+  switch (rnd) {
+    case 0:
+      rnd = ~~(Math.random() * width);
+      mazeData[rnd] &= 0x7F;
+      break;
+    case 1:
+      rnd = ~~(Math.random() * height);
+      mazeData[(rnd + 1) * width - 1] &= 0xBF;
+      break;
+    case 2:
+      rnd = ~~(Math.random() * height);
+      mazeData[rnd * width] &= 0xDF;
+      break;
+    case 3:
+      rnd = ~~(Math.random() * width);
+      mazeData[(height - 1) * width + rnd] &= 0xEF;
+      break;
+  }
 
   return mazeData;
 }
