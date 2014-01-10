@@ -1,4 +1,4 @@
-
+var camera, scene, renderer, gameTimer;
 
 /**
  * Garbage loader-specific logic, bleh
@@ -64,24 +64,7 @@ function runOnce() {
   scene.add(g.currentMazeMesh);
   scene.add(g.playerMesh);
 
-  //generate backing pane
-  var bgsx = g.currentMaze.width * 2 * 25 + 25;
-  var bgsz = g.currentMaze.height * 2 * 25 + 25;
-  var brickTexture = THREE.ImageUtils.loadTexture("res/brick.png");
-  brickTexture.repeat.set(32, 32);
-  brickTexture.wrapS = THREE.RepeatWrapping;
-  brickTexture.wrapT = THREE.RepeatWrapping;
-  var bg = new THREE.Mesh(new THREE.PlaneGeometry(bgsx, bgsz, 32, 32),
 
-                          new THREE.MeshPhongMaterial( { wireframe: false,
-                                                          map: brickTexture, bumpMap: brickTexture}));
-
-  bg.rotation.x = Math.PI * 3 / 2;
-  bg.position.y = -12.5;
-  bg.position.x += bgsx / 2 - 12.5;
-  bg.position.z += bgsz / 2 - 12.5;
-  bg.receiveShadow = true;
-  scene.add(bg);
 
 
   //generate giant background plane
@@ -93,7 +76,6 @@ function runOnce() {
   bg2.position.z += bgsz / 2;
   scene.add(bg2);
 
-  scene.add(g.crosshairMesh);
   scene.add(g.playerLight);
 }
 
