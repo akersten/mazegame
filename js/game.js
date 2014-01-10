@@ -6,7 +6,7 @@ function game() {
   this.loaded = false;
 
   //First we'll generate the actual maze data.
-  this.currentMaze = new maze(16,16);
+  this.currentMaze = new maze(6,6);
   this.currentMaze.debugPrint();
 
   //Then, generate the world geometry.
@@ -25,7 +25,7 @@ function game() {
   this.playerMesh.position.x = 2 * (this.currentMaze.homecell % this.currentMaze.width) * 25 + 25;
   this.playerMesh.position.z = 2 * ~~(this.currentMaze.homecell / this.currentMaze.width) * 25 + 25;
 
-  this.playerLight = new THREE.SpotLight(0xFFFCCC);
+  this.playerLight = new THREE.SpotLight(0xEFEFEF);
   this.playerLight.castShadow = true;
   this.playerLight.shadowMapWidth = 1024;
   this.playerLight.shadowMapHeight = 1024;
