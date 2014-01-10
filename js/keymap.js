@@ -14,6 +14,9 @@ keymap = new function() {
     'goDown': false,
     'goUp': false,
     'camDown': false,
+    'camRight': false,
+    'camUp': false,
+    'camLeft': false,
   };
 
   this.map = {
@@ -21,7 +24,10 @@ keymap = new function() {
     83: 'goDown',
     68: 'goRight',
     87: 'goUp',
-    66: 'camDown',
+    40: 'camDown',
+    39: 'camRight',
+    38: 'camUp',
+    37: 'camLeft',
   };
 
   this.mouseX = 0;

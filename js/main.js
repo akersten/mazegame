@@ -98,6 +98,8 @@ function runOnce() {
 }
 
 
+var camAngleOff = 0;
+
 function animate() {
   requestAnimationFrame(animate);
   var delta = gameTimer.getDelta();
@@ -144,7 +146,8 @@ function animate() {
   runOnce();
 
   camera.position.x = g.playerMesh.position.x;
-  camera.position.z = g.playerMesh.position.z + 10;
+  camera.position.y = 200 * Math.cos(camAngleOff);
+  camera.position.z = g.playerMesh.position.z + 10 + 35 * Math.sin(camAngleOff);
   camera.lookAt(g.playerMesh.position);
   camera.rotation.z = 0;
 
@@ -168,9 +171,22 @@ function animate() {
       g.playerMesh.position.z += delta * 40;
     }
   }
+
+
   if (keymap.pressed['camDown']) {
-    camera.position.setY(camera.position.y - 0.5);
-    camera.position.setZ(camera.position.z - 5);
+    if (camAngleOff < Math.PI / 2) {
+      camAngleOff += 0.01;
+    }
+    //camera.position.setY(camera.position.y - 0.5);
+   // camera.position.setZ(camera.position.z - 5);
+  }
+
+  if (keymap.pressed['camUp']) {
+    if (camAngleOff > 0) {
+      camAngleOff -= 0.01;
+    }
+    //camera.position.setY(camera.position.y - 0.5);
+   // camera.position.setZ(camera.position.z - 5);
   }
 
   g.playerMesh.rotation.y += 0.01;

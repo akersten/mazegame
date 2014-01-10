@@ -319,6 +319,9 @@ function generate_DFS(width, height) {
     curCell = canCell;
   }
 
+  //Pick a random edge cell from which to knock out the exit.
+
+
   return mazeData;
 }
 
