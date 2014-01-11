@@ -9,25 +9,27 @@
  */
 keymap = new function() {
   this.pressed = {
-    'goLeft': false,
-    'goRight': false,
-    'goDown': false,
-    'goUp': false,
-    'camDown': false,
-    'camRight': false,
-    'camUp': false,
-    'camLeft': false,
+    'strafeLeft': false,
+    'strafeRight': false,
+    'stepBackward': false,
+    'stepForward': false,
+    'turnLeft': false,
+    'turnRight': false,
+    'debugPrint': false,
+    'cameraYaw': false,
+    'cameraBarrel': false,
   };
 
   this.map = {
-    65: 'goLeft',
-    83: 'goDown',
-    68: 'goRight',
-    87: 'goUp',
-    40: 'camDown',
-    39: 'camRight',
-    38: 'camUp',
-    37: 'camLeft',
+    65: 'strafeLeft',
+    83: 'stepBackward',
+    68: 'strafeRight',
+    87: 'stepForward',
+    37: 'turnLeft',
+    39: 'turnRight',
+    66: 'debugPrint',
+    38: 'cameraYaw',
+    40: 'cameraBarrel',
   };
 
   this.mouseX = 0;

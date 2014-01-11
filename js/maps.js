@@ -394,6 +394,8 @@ function generateMazeGeometry(mazeObj) {
           transz(tmp, (2 * i + 1) * blockSize);
           THREE.GeometryUtils.merge(geo,tmp);
 
+          //For most of these, we have to generate two blocks for each cell, since
+          //the next cell over is actually two block spaces (the cell and a wall).
           var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
           transz(tmp, (2 * i + 2) * blockSize);
           THREE.GeometryUtils.merge(geo,tmp);
@@ -420,6 +422,7 @@ function generateMazeGeometry(mazeObj) {
         transz(tmp, (2 * i + 1) * blockSize);
         transx(tmp, (2 * j + 2) * blockSize);
         THREE.GeometryUtils.merge(geo,tmp);
+
         if (!(i > 0 && i < mazeObj.height - 1 && j > 0 && j < mazeObj.width - 1 && Math.random() > 0.6)) {
           var tmp = new THREE.CubeGeometry(blockSize, blockSize, blockSize);
           transz(tmp, (2 * i) * blockSize);
