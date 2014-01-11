@@ -1,3 +1,4 @@
+var beginMessage = "Click to start.";
 //Check if pointer lock is supported and complain if not.
 var pl = 'pointerLockElement' in document ||
     'mozPointerLockElement' in document ||
@@ -12,7 +13,11 @@ var canvas = document.getElementById("renderCanvas");
 canvas.requestPointerLock = canvas.requestPointerLock ||
   canvas.mozRequestPointerLock ||
   canvas.webkitRequestPointerLock;
+
 canvas.onmousedown = function(evt) {
+  if (document.getElementById("message").innerHTML == beginMessage) {
+    document.getElementById("message").innerHTML = "";
+  }
   canvas.requestPointerLock();
 }
 
@@ -22,3 +27,5 @@ document.onmousemove = function(evt) {
     g.mouseMove(evt);
   }
 }
+
+document.getElementById("message").innerHTML = beginMessage;
