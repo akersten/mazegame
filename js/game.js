@@ -12,6 +12,7 @@ function game() {
     PLAYER_HEIGHT: 3,
     PLAYER_SPEED: 40,
     PLAYER_KEYTURN_SPEED: 0.03,
+    PLAYER_MOUSETURN_SPEED_INV: 200,
     CROSSHAIR_COLOR: 0x00DDDD,
     FLASHLIGHT_COLOR: 0xEFEFDF,
     FLASHLIGHT_ANGLE: Math.PI / 3,
@@ -224,13 +225,15 @@ function game() {
   //Mouse motion deltas since last frame.
   this.mdx = 0.0;
   this.mdy = 0.0;
+
   /**
    * Update the motion deltas to be resolved on the next frame.
    */
-  this.mouseMove = function(evt) {
-    this.mdx += evt.movementX;
-    this.mdy += evt.movementY;
+  this.mouseMove = function(movX, movY) {
+    this.mdx += movX;
+    this.mdy += movY;
   }
+
   /**
    * Invoked by the renderer on an animation frame, with a time delta since the
    * last time logic ran.
@@ -239,6 +242,41 @@ function game() {
     //--------------------------------------------------------------------------
     //Player/flashlight movement and camera updating
     //--------------------------------------------------------------------------
+
+    //Add any mouse movement to the player's target direction angles.
+    this.player.theta += this.mdx / this.constants.PLAYER_MOUSETURN_SPEED_INV;
+    this.player.phi += this.mdy / this.constants.PLAYER_MOUSETURN_SPEED_INV;
+
+    this.mdx = 0;
+    this.mdy = 0;
+
+    //Manual input for turning.
+    if (keymap.pressed['turnLeft']) {
+      this.player.theta -= this.constants.PLAYER_KEYTURN_SPEED;
+    }
+
+    if (keymap.pressed['turnRight']) {
+      this.player.theta += this.constants.PLAYER_KEYTURN_SPEED;
+    }
+
+    //Clamp theta.
+    while (this.player.theta >= 2.0 * Math.PI) {
+      this.player.theta -= 2 * Math.PI;
+    }
+
+    while (this.player.theta < 0.0) {
+      this.player.theta += 2 * Math.PI;
+    }
+
+    //Clamp phi.
+    if (this.player.phi > Math.PI / 2) {
+      this.player.phi = Math.PI / 2;
+    }
+
+    if (this.player.phi < -Math.PI / 2) {
+      this.player.phi = - Math.PI / 2;
+    }
+
     var _cT = Math.cos(this.player.theta);
     var _sT = Math.sin(this.player.theta);
 
@@ -286,23 +324,7 @@ function game() {
       }
     }
 
-    //Manual input for turning.
-    if (keymap.pressed['turnLeft']) {
-      this.player.theta -= this.constants.PLAYER_KEYTURN_SPEED;
-    }
 
-    if (keymap.pressed['turnRight']) {
-      this.player.theta += this.constants.PLAYER_KEYTURN_SPEED;
-    }
-
-    //Keep theta bounded.
-    while (this.player.theta >= 2.0 * Math.PI) {
-      this.player.theta -= 2 * Math.PI;
-    }
-
-    while (this.player.theta < 0.0) {
-      this.player.theta += 2 * Math.PI;
-    }
 
     //Position the camera where the player should be, and position the crosshair
     //the correct distance out from the player.

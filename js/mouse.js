@@ -24,7 +24,8 @@ canvas.onmousedown = function(evt) {
 //When the mouse is moved, invoke the game's mouse movement handler.
 document.onmousemove = function(evt) {
   if (g) {
-    g.mouseMove(evt);
+    g.mouseMove(evt.movementX || evt.mozMovementX || evt.webkitMovementX || 0,
+                evt.movementY || evt.mozMovementY || evt.webkitMovementY || 0);
   }
 }
 
