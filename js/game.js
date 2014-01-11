@@ -339,7 +339,8 @@ function game() {
 
     //Move the crosshair to a unit in front of where the player is looking.
     this.playerCrosshair.position.set(this.player.x + _playerDir.x,
-                                      this.constants.PLAYER_HEIGHT,
+                                      this.constants.PLAYER_HEIGHT -
+                                      1.0 * Math.sin(this.player.phi),
                                       this.player.z + _playerDir.z);
 
 
