@@ -9,10 +9,10 @@ if (!pl) {
 
 //Set up the browser to capture the mouse on a click in the render canvas.
 var canvas = document.getElementById("renderCanvas");
+canvas.requestPointerLock = canvas.requestPointerLock ||
+  canvas.mozRequestPointerLock ||
+  canvas.webkitRequestPointerLock;
 canvas.onmousedown = function(evt) {
-  canvas.requestPointerLock = canvas.requestPointerLock ||
-    canvas.mozRequestPointerLock ||
-    canvas.webkitRequestPointerLock;
   canvas.requestPointerLock();
 }
 
