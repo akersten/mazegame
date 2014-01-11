@@ -31,19 +31,6 @@ keymap = new function() {
     38: 'cameraYaw',
     40: 'cameraBarrel',
   };
-
-  this.mouseX = 0;
-  this.mouseY = 0;
-
-  this.mX = function() {
-    return 2 * (this.mouseX / window.innerWidth - 0.5);
-  }
-
-  this.mY = function() {
-    return 2 * (this.mouseY / window.innerHeight - 0.5);
-  }
-
-
 };
 
 document.onkeydown = function(evt) {
@@ -54,7 +41,3 @@ document.onkeyup = function(evt) {
   keymap.pressed[keymap.map[evt.keyCode]] = false;
 };
 
-document.onmousemove = function(evt) {
-  keymap.mouseX = evt.clientX;
-  keymap.mouseY = evt.clientY;
-}

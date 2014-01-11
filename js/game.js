@@ -221,6 +221,16 @@ function game() {
 //TODO: Remove everything that was created.
   }
 
+  //Mouse motion deltas since last frame.
+  this.mdx = 0.0;
+  this.mdy = 0.0;
+  /**
+   * Update the motion deltas to be resolved on the next frame.
+   */
+  this.mouseMove = function(evt) {
+    this.mdx += evt.movementX;
+    this.mdy += evt.movementY;
+  }
   /**
    * Invoked by the renderer on an animation frame, with a time delta since the
    * last time logic ran.
