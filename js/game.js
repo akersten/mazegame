@@ -30,7 +30,7 @@ function game() {
   this.playerMesh = null;
   this.playerLight = null;
 
-  this.player = {x: 0, z: 0, theta: 0};
+  this.player = {x: 0, z: 0, theta: 0, phi: 0};
 
   this.textures = {};
   this.loadedTextures = 0;
@@ -244,10 +244,10 @@ function game() {
 
     //Check to see if the player wants to move, and move if we can. First we
     //need a normalized viewport vector to see where the player is facing.
-    var _playerView = new THREE.Vector3(1.0 * _cT, 0, 1.0 * _sT);
+    var _playerDir = new THREE.Vector3(1.0 * _cT, 0, 1.0 * _sT);
 
     if (keymap.pressed['stepForward']) {
-      if (!wouldPlayerCollideWithMaze(_playerView,
+      if (!wouldPlayerCollideWithMaze(_playerDir,
                                       delta * this.constants.PLAYER_SPEED)) {
         this.player.x += delta * _cT * this.constants.PLAYER_SPEED;
         this.player.z += delta * _sT * this.constants.PLAYER_SPEED;
@@ -255,9 +255,9 @@ function game() {
     }
 
     if (keymap.pressed['stepBackward']) {
-      if (!wouldPlayerCollideWithMaze(new THREE.Vector3(-_playerView.x,
+      if (!wouldPlayerCollideWithMaze(new THREE.Vector3(-_playerDir.x,
                                                         0,
-                                                        -_playerView.z),
+                                                        -_playerDir.z),
                                       delta * this.constants.PLAYER_SPEED)) {
         this.player.x -= delta * _cT * this.constants.PLAYER_SPEED;
         this.player.z -= delta * _sT * this.constants.PLAYER_SPEED;
@@ -266,7 +266,7 @@ function game() {
 
     //Vector orthogonal to the player view, to the right.
     var _xProd = new THREE.Vector3();
-    _xProd.crossVectors(_playerView, new THREE.Vector3(0.0, 1.0, 0.0));
+    _xProd.crossVectors(_playerDir, new THREE.Vector3(0.0, 1.0, 0.0));
 
     if (keymap.pressed['strafeRight']) {
       if (!wouldPlayerCollideWithMaze(_xProd,
@@ -316,9 +316,9 @@ function game() {
                                   this.player.z);
 
     //Move the crosshair to a unit in front of where the player is looking.
-    this.playerCrosshair.position.set(this.player.x + _playerView.x,
+    this.playerCrosshair.position.set(this.player.x + _playerDir.x,
                                       this.constants.PLAYER_HEIGHT,
-                                      this.player.z + _playerView.z);
+                                      this.player.z + _playerDir.z);
 
 
     //TODO: Slow delay as camera moves to flashlight target...
