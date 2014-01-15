@@ -1,3 +1,6 @@
+
+var blockSize = 25;
+
 /**
  * The maze object.
  */
@@ -46,6 +49,18 @@ function maze(width, height) {
       case 3:
         return (bits & 0x10) > 0;
     }
+  }
+
+  /**
+   * Returns a random position inside the maze, in the coordinates of the world.
+   *
+   * @return A random maze position in world-space (relative to 0,0).
+   */
+  this.findRandomCellWorldPosition = function () {
+    var _rndX = ~~(Math.random() * this.width);
+    var _rndZ = ~~(Math.random() * this.height);
+
+    return {x: _rndX * blockSize + blockSize, z: _rndZ * blockSize + blockSize};
   }
 
   /**
@@ -371,7 +386,6 @@ function generateMazeGeometry(mazeObj) {
     }
   }
 
-  var blockSize = 25;
 
   //We'll have the upper-left cornerstone be our anchor. Generate it first and
   //attach anything else to it.

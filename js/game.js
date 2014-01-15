@@ -39,7 +39,8 @@ function game() {
   //How many textures must be loaded before we allow rendering, since the
   //texture loads are async and that makes our life a lot harder...
 
-  this.REQUIRED_TEXTURES = ["floor1", "ceil1", "wall1"];
+  this.REQUIRED_TEXTURES = ["evil",
+                            "floor1", "ceil1", "wall1",];
 
   /**
    * Avoid accidental closure by making this a proper function rather than a
@@ -67,7 +68,7 @@ function game() {
           this.textures[this.REQUIRED_TEXTURES[i]] =
             THREE.ImageUtils.loadTexture("res/" + this.REQUIRED_TEXTURES[i] +
                                          ".png", THREE.UVMapping);
-          this.textures[this.REQUIRED_TEXTURES[i]] =
+          this.textures[this.REQUIRED_TEXTURES[i] + "_bumpmap"] =
             THREE.ImageUtils.loadTexture("res/" + this.REQUIRED_TEXTURES[i] +
                                          "_bumpmap.png", THREE.UVMapping,
                                          incLoadedTextures(this));
@@ -93,7 +94,7 @@ function game() {
       new THREE.Mesh(_mazeGeometry, new THREE.MeshPhongMaterial(
         {
           map: this.textures[wallTextureName],
-          bumpMap: this.textures[wallTextureName],
+          bumpMap: this.textures[wallTextureName + "_bumpmap"],
         }
       )
                     );
@@ -121,10 +122,20 @@ function game() {
     this.textures[floorTextureName].wrapS = THREE.RepeatWrapping;
     this.textures[floorTextureName].wrapT = THREE.RepeatWrapping;
 
+    this.textures[floorTextureName + "_bumpmap"].repeat.set(
+      3 * this.currentMazeData.width, 3 * this.currentMazeData.height);
+    this.textures[floorTextureName + "_bumpmap"].wrapS = THREE.RepeatWrapping;
+    this.textures[floorTextureName + "_bumpmap"].wrapT = THREE.RepeatWrapping;
+
     this.textures[ceilTextureName].repeat.set(3 * this.currentMazeData.width,
                                               3 * this.currentMazeData.height);
     this.textures[ceilTextureName].wrapS = THREE.RepeatWrapping;
     this.textures[ceilTextureName].wrapT = THREE.RepeatWrapping;
+
+    this.textures[ceilTextureName + "_bumpmap"].repeat.set(
+      3 * this.currentMazeData.width, 3 * this.currentMazeData.height);
+    this.textures[ceilTextureName + "_bumpmap"].wrapS = THREE.RepeatWrapping;
+    this.textures[ceilTextureName + "_bumpmap"].wrapT = THREE.RepeatWrapping;
 
     //Make the floor and ceiling meshes.
     var _floor = new THREE.Mesh(
@@ -132,7 +143,7 @@ function game() {
                               this.constants.BUN_RESOLUTION,
                               this.constants.BUN_RESOLUTION),
       new THREE.MeshPhongMaterial({map: this.textures[floorTextureName],
-                                   bumpMap: this.textures[floorTextureName]}));
+                                   bumpMap: this.textures[floorTextureName + "_bumpmap"]}));
 
     _floor.rotation.x = Math.PI * 3 / 2;
     _floor.position.y = -this.constants.WALL_SIZE / 2;
@@ -145,7 +156,7 @@ function game() {
                               this.constants.BUN_RESOLUTION,
                               this.constants.BUN_RESOLUTION),
       new THREE.MeshPhongMaterial({map: this.textures[ceilTextureName],
-                                   bumpMap: this.textures[ceilTextureName]}));
+                                   bumpMap: this.textures[ceilTextureName + "_bumpmap"]}));
 
     _ceil.rotation.x = Math.PI / 2;
     _ceil.position.y = this.constants.WALL_SIZE / 2;
@@ -209,6 +220,27 @@ function game() {
     this.player.z = 2 *
       ~~(this.currentMazeData.homecell / this.currentMazeData.width) *
       this.constants.WALL_SIZE + this.constants.WALL_SIZE;
+
+
+    //XXX: Test, adding an evil sphere
+    this.textures["evil"].repeat.set(2, 2);
+    this.textures["evil"].wrapS = THREE.RepeatWrapping;
+    this.textures["evil"].wrapT = THREE.RepeatWrapping;
+    this.textures["evil_bumpmap"].repeat.set(2, 2);
+    this.textures["evil_bumpmap"].wrapS = THREE.RepeatWrapping;
+    this.textures["evil_bumpmap"].wrapT = THREE.RepeatWrapping;
+    this.textures["evil"].offset.x = 0.5; //Put the face in the middle
+    this.textures["evil"].offset.y = 0.5;
+    this.textures["evil_bumpmap"].offset.x = 0.5;
+    this.textures["evil_bumpmap"].offset.y = 0.5;
+
+    var evil =
+    new THREE.Mesh(new THREE.SphereGeometry(10, 8, 6),
+                   new THREE.MeshLambertMaterial({map: this.textures['evil'],
+                   bumpMap: this.textures['evil_bumpmap']}));
+    var rndpos = this.currentMazeData.findRandomCellWorldPosition();
+    evil.position.set(rndpos.x, 0, rndpos.z);
+    scene.add(evil);
   }
 
   /**
