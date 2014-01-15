@@ -7,6 +7,7 @@ var blockSize = 25;
 function maze(width, height) {
   if (width < 2 || height < 2) {
     alert("Invalid maze parameters!");
+    return;
   }
 
   this.width = width;
@@ -65,9 +66,11 @@ function maze(width, height) {
 
   /**
    * Print a textual representation of the maze to the debug console, just
-   * to make sure our maze generation is doing sane things.
+   * to make sure our maze generation is doing sane things. Also, this has
+   * some logic for HTML rendering as well for use in the ASCII display page.
    */
-  this.debugPrint = function() {
+  this.debugPrint = function(showBacktrack) {
+    var ret = "";
     for (var i = 0; i < this.height; i++) {
       for (var j = 0; j < 3; j++) {
         //Each row has a top, middle, and bottom.
@@ -90,9 +93,8 @@ function maze(width, height) {
                 line += " ";
               }
               if (this.mazeData[i * width + k] & 0x01) {
-                line += "H";
                 //By the way, this is the home square...
-
+                line += "H";
               }else {
                 switch((this.mazeData[i * width + k] & 0x0C) >> 2) {
                   case 0:
@@ -117,6 +119,11 @@ function maze(width, height) {
               }
               break;
             case 2:
+              //Don't print the bottom unless this is the last row of the maze.
+              //Otherwise, there'll be a bunch of repeats.
+              if (i + 1 != this.height) {
+                continue;
+              }
               line += "*";
               if (this.hasWall(k, i, 3)) {
                 line += "-";
@@ -127,9 +134,30 @@ function maze(width, height) {
               break;
           }
         }
+        //Again, don't print out the line if this isn't the bottom. (Earlier
+        //check was just to save performance, this prevents the extra <br>).
+        if (j == 2 && i != height - 1) {
+          continue;
+        }
         console.log(line);
+        //Replacements for nice HTML rendering.
+        line = line.replace(/\*/g, '&middot;');
+        line = line.replace(/ /g, '&nbsp;');
+        line = line.replace(/-/g, '&mdash;');
+        if (showBacktrack) {
+          line = line.replace(/>/g, '&gt;');
+          line = line.replace(/</g, '&lt;');
+        } else {
+          line = line.replace(/>/g, '&nbsp;');
+          line = line.replace(/</g, '&nbsp;');
+          line = line.replace(/\^/g, '&nbsp;');
+          line = line.replace(/v/g, '&nbsp;');
+        }
+
+        ret += line + "<br />";
       }
     }
+    return ret;
   }
 }
 

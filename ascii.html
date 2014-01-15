@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+
+        <title>Maze Visualizer</title>
+    </head>
+    <body>
+        <p>
+            Visualize the mazes created by the mazegame.
+        </p>
+        <p>
+            Algorithm:
+            <select id="algo">
+                <option value="dfs">DFS</option>
+            </select>
+            <input type="number" placeholder="Width" id="width" />
+            x
+            <input type="number" placeholder="Height" id="height" />
+            <a href="#"
+               onclick="generateWithAlgo('algo', 'width', 'height', 'output',
+                        'backtrack'); return false;">Generate</a>
+            <input type="checkbox" id="backtrack" />
+            <label for="backtrack">Show backtrack data</label>
+        </p>
+        <p id="output" style="font-family: monospace; line-height: .75em;">
+
+        </p>
+
+        <script src="js/maps.js"></script>
+        <script src="js/ascii.js"></script>
+    </body>
+</html>
