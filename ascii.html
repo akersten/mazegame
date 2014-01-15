@@ -6,6 +6,13 @@
         <title>Maze Visualizer</title>
     </head>
     <body>
+        <style>
+            @media print {
+                p {
+                    display: none;
+                }
+            }
+        </style>
         <p>
             Visualize the mazes created by the mazegame.
         </p>
@@ -23,9 +30,9 @@
             <input type="checkbox" id="backtrack" />
             <label for="backtrack">Show backtrack data</label>
         </p>
-        <p id="output" style="font-family: monospace; line-height: .75em;">
+        <pre id="output" style="font-family: monospace; line-height: .75em;">
 
-        </p>
+        </pre>
 
         <script src="js/maps.js"></script>
         <script src="js/ascii.js"></script>
