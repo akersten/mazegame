@@ -95,6 +95,11 @@ function maze(width, height) {
               if (this.mazeData[i * width + k] & 0x01) {
                 //By the way, this is the home square...
                 line += "H";
+              } else if (!(this.mazeData[i * width + k] & 0x02)) {
+                //This cell isn't "visited" - it's the exit cell (we're re-using
+                //the visited bit at the end of generation to determine which
+                //cell is the exit).
+                line += "E";
               }else {
                 switch((this.mazeData[i * width + k] & 0x0C) >> 2) {
                   case 0:
@@ -177,6 +182,9 @@ function maze(width, height) {
  *         Visited bit is for the DFS to determine if any neighbors of the
  *         current cell need exploring. Home bit is to let us know whether the
  *         backtrack direction is valid (or if generation has come to an end).
+ *         At the end of generation, the visited bit will become the "exit cell"
+ *         bit. If it's a 0, that cell was the cell selected as the exit to the
+ *         maze (the rest will have been set as 1, since we visited them all).
  *
  * @return A typed array containing `width` * `height` entries of the above.
  */
@@ -362,24 +370,27 @@ function generate_DFS(width, height) {
     curCell = canCell;
   }
 
-  //Pick a random edge cell from which to knock out the exit.
+  //Pick a random edge cell from which to knock out the exit, and also mark it
+  //as "non-visited". Since we're done here, the visited bit doesn't matter and
+  //since all other cells will be marked as visited, we can re-use it to
+  //determine which cell is the exit ;)
   var rnd = ~~(Math.random() * 3);
   switch (rnd) {
     case 0:
       rnd = ~~(Math.random() * width);
-      mazeData[rnd] &= 0x7F;
+      mazeData[rnd] &= 0x7D;
       break;
     case 1:
       rnd = ~~(Math.random() * height);
-      mazeData[(rnd + 1) * width - 1] &= 0xBF;
+      mazeData[(rnd + 1) * width - 1] &= 0xBD;
       break;
     case 2:
       rnd = ~~(Math.random() * height);
-      mazeData[rnd * width] &= 0xDF;
+      mazeData[rnd * width] &= 0xDD;
       break;
     case 3:
       rnd = ~~(Math.random() * width);
-      mazeData[(height - 1) * width + rnd] &= 0xEF;
+      mazeData[(height - 1) * width + rnd] &= 0xED;
       break;
   }
 
