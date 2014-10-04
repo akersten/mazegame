@@ -1,3 +1,6 @@
-This is the best maze game of All Time
+mazegame
+===
 
-Actually it's just my ongoing experiment with THREE.js, maybe I'll do some shaders or something eventually.
+A 3D first-person maze demo. I generate the mazes with a DFS-based algorithm, and the rendering is handled through THREE.js.
+
+Live demo: http://kersten.io/mazegame
